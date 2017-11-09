@@ -5,6 +5,7 @@
 
 import json
 from collections import OrderedDict
+import re
 
 def main():
     list_dic = {}
@@ -37,11 +38,14 @@ def main():
         manufacturer = product_data["manufacturer"].lower()
         if manufacturer in list_dic:
            model = product_data["model"].lower()
+           model_re = re.compile(r'\b'+model+r'\b')
            family = ""
+           family_re = re.compile(r'.')
            if "family" in product_data:
               family = product_data["family"].lower()
+              family_re = re.compile(r'\b'+family+r'\b')
            for listing in list_dic[manufacturer]:
-               if model in listing["title"].lower() and family in listing["title"].lower():
+               if model_re.search(listing["title"].lower()) and family_re.search(listing["title"].lower()):
                   if product_name not in result_dic:
                      result_list = [listing]
                      result_dic[product_name] = result_list
